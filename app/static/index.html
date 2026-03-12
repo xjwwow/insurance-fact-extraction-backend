@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>保险年报事实提取平台</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="shell shell-upload">
+  <main class="page page-upload">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Insurance Annual Report Extraction</p>
+        <h1>上传、解析、校对，进入年报结构化工作流</h1>
+        <p class="hero-text">
+          上传 PDF，选择保险公司、业务条线和报告类型，系统会发起解析任务，完成后进入表格导航、事实查看、指标匹配与人工审核页面。
+        </p>
+        <div class="hero-links">
+          <a class="button-primary" href="#upload-form">开始上传</a>
+          <a class="button-secondary" href="/metrics/library">查看指标库</a>
+          <a class="button-secondary" href="/qa/workbench">进入校对台</a>
+          <a class="button-secondary" href="/metrics/review">指标审核台</a>
+        </div>
+      </div>
+      <div class="hero-metrics">
+        <div class="metric-card">
+          <span class="metric-label">流程</span>
+          <strong>上传</strong>
+          <strong>解析</strong>
+          <strong>核心指标匹配</strong>
+          <strong>人工审核</strong>
+        </div>
+        <div class="metric-card accent">
+          <span class="metric-label">当前模式</span>
+          <strong>FastAPI + Celery</strong>
+          <span class="metric-subtext">真实 PDF 解析、OCR 回退、候选指标扩展、证据链回溯</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel upload-panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">上传与解析</p>
+          <h2>新建报告任务</h2>
+        </div>
+        <span class="panel-tag">Reporting</span>
+      </div>
+
+      <form id="upload-form" class="upload-form">
+        <label class="field">
+          <span>保险公司</span>
+          <select name="company_id" required>
+            <option value="pingan">平安</option>
+            <option value="china_life">国寿</option>
+            <option value="picc">人保</option>
+            <option value="cpic">太保</option>
+            <option value="taiping">太平</option>
+            <option value="nci">新华</option>
+            <option value="taikang">泰康</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>所属大类</span>
+          <select name="business_line" required>
+            <option value="group">集团</option>
+            <option value="life">寿险</option>
+            <option value="pnc">产险</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>报告类型</span>
+          <select name="report_type" required>
+            <option value="annual_report">年报</option>
+            <option value="semiannual_report">半年报</option>
+            <option value="quarterly_report">季报</option>
+            <option value="monthly_report">月报</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>报告年份</span>
+          <input type="number" name="report_year" min="2000" max="2100" value="2024" required>
+        </label>
+
+        <label class="field field-file">
+          <span>PDF 文件</span>
+          <input type="file" name="file" accept="application/pdf" required>
+        </label>
+
+        <div class="form-actions">
+          <button id="submit-button" class="button-primary" type="submit">上传并开始解析</button>
+          <a class="button-secondary" href="/docs" target="_blank" rel="noreferrer">API 文档</a>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel status-panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">任务状态</p>
+          <h2>执行进度</h2>
+        </div>
+      </div>
+
+      <ol id="status-timeline" class="timeline">
+        <li class="timeline-item active">
+          <span class="timeline-step">1</span>
+          <div>
+            <strong>等待上传</strong>
+            <p>选择报告并提交任务。</p>
+          </div>
+        </li>
+      </ol>
+
+      <div id="result-card" class="result-card hidden">
+        <div class="result-grid">
+          <div>
+            <span class="metric-label">文档</span>
+            <strong id="result-document-id">-</strong>
+          </div>
+          <div>
+            <span class="metric-label">解析页数</span>
+            <strong id="result-pages">-</strong>
+          </div>
+          <div>
+            <span class="metric-label">检测表格</span>
+            <strong id="result-tables">-</strong>
+          </div>
+          <div>
+            <span class="metric-label">抽取事实</span>
+            <strong id="result-facts">-</strong>
+          </div>
+        </div>
+        <div class="result-actions">
+          <a id="viewer-link" class="button-primary" href="#">打开结果对照页</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel recent-panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">最近文档</p>
+          <h2>可直接进入查看</h2>
+        </div>
+      </div>
+      <div id="recent-documents" class="recent-list"></div>
+    </section>
+  </main>
+
+  <script src="/static/upload.js" defer></script>
+</body>
+</html>

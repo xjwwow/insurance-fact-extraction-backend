@@ -1,0 +1,2 @@
+﻿metric_code,metric_name,category,default_unit,aliases,report_types,business_lines
+OPERATING_REVENUE_CORE,营业收入,经营指标,CNY_10K,营业总收入;主营业务收入,annual_report;semiannual_report,group;life

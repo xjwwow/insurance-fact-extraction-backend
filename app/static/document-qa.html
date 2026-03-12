@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>表格质检</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="shell shell-viewer">
+  <main class="page page-viewer">
+    <header class="viewer-header panel">
+      <div>
+        <p class="eyebrow">Document QA</p>
+        <h1 id="qa-page-title">文档表格质检</h1>
+        <p id="qa-page-subtitle" class="hero-text">正在加载表格质检结果...</p>
+      </div>
+      <div class="viewer-actions">
+        <a id="qa-back-viewer" class="button-secondary" href="#">返回文档查看</a>
+        <button id="qa-refresh" class="button-secondary" type="button">刷新</button>
+        <a id="qa-export" class="button-primary" href="#">导出 Excel</a>
+      </div>
+    </header>
+
+    <section class="panel workspace-panel">
+      <div id="qa-summary-cards" class="summary-cards"></div>
+    </section>
+
+    <section class="viewer-grid viewer-grid-wide workspace-grid qa-doc-grid">
+      <section class="panel column workspace-main qa-table-pane">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">QA Result</p>
+            <h2>表格质检列表</h2>
+          </div>
+          <span id="qa-row-count" class="panel-tag">0 张表</span>
+        </div>
+        <div class="facts-table-wrap qa-result-wrap">
+          <table class="facts-table">
+            <thead>
+              <tr>
+                <th>章节</th>
+                <th>页码</th>
+                <th>表名</th>
+                <th>引擎</th>
+                <th>表头层级</th>
+                <th>BBox</th>
+                <th>自动状态</th>
+                <th>人工状态</th>
+              </tr>
+            </thead>
+            <tbody id="qa-result-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="panel column workspace-sidebar qa-detail-pane">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Detail</p>
+            <h2>质检详情</h2>
+          </div>
+        </div>
+        <div id="qa-detail-shell" class="detail-shell empty-state">点击左侧表格后查看自动预警并填写人工备注。</div>
+        <div class="subpanel top-gap">
+          <div class="subpanel-header"><h3>人工结论</h3></div>
+          <label class="field compact">
+            <span>人工状态</span>
+            <select id="qa-manual-status">
+              <option value="">未填写</option>
+              <option value="PASS">通过</option>
+              <option value="REVIEW">待复核</option>
+              <option value="FAIL">失败</option>
+            </select>
+          </label>
+          <label class="field compact">
+            <span>备注</span>
+            <textarea id="qa-manual-note" rows="8" placeholder="记录列头缺失、换行错位、合并单元格异常等问题"></textarea>
+          </label>
+          <label class="field compact">
+            <span>审核人</span>
+            <input id="qa-reviewer" type="text" value="admin">
+          </label>
+          <div class="form-actions top-gap">
+            <button id="qa-save-review" class="button-primary" type="button">保存备注</button>
+            <a id="qa-open-viewer-link" class="button-secondary" href="#" target="_blank" rel="noreferrer">打开对应 viewer</a>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="/static/document-qa.js" defer></script>
+</body>
+</html>

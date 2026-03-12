@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校对工作台</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="shell shell-viewer">
+  <main class="page page-viewer">
+    <header class="viewer-header panel">
+      <div>
+        <p class="eyebrow">QA Workbench</p>
+        <h1>事实校对工作台</h1>
+        <p class="hero-text">按文档、年份与公司筛选待审核事实，支持通过、修正数值、重映射指标，并查看来源页。</p>
+      </div>
+      <div class="viewer-actions">
+        <a class="button-secondary" href="/">上传页</a>
+        <a class="button-secondary" href="/metrics/library">指标库</a>
+        <a class="button-secondary" href="/metrics/review">指标审核台</a>
+      </div>
+    </header>
+
+    <section class="panel workspace-panel">
+      <div class="filter-grid qa-filters">
+        <label class="field">
+          <span>公司</span>
+          <input id="qa-company" type="text" placeholder="例如 pingan-ui-test">
+        </label>
+        <label class="field">
+          <span>年份</span>
+          <input id="qa-year" type="number" min="2000" max="2100" placeholder="2024">
+        </label>
+        <label class="field">
+          <span>文档 ID</span>
+          <input id="qa-document" type="text" placeholder="可选">
+        </label>
+        <label class="field">
+          <span>审核人</span>
+          <input id="qa-reviewer" type="text" value="admin">
+        </label>
+      </div>
+      <div class="form-actions top-gap">
+        <button id="qa-refresh" class="button-primary" type="button">刷新待审队列</button>
+      </div>
+    </section>
+
+    <section class="viewer-grid viewer-grid-wide workspace-grid">
+      <aside class="panel column workspace-sidebar">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Queue</p>
+            <h2>待审核事实</h2>
+          </div>
+          <span id="qa-count" class="panel-tag">0 items</span>
+        </div>
+        <div id="qa-list" class="list-stack"></div>
+      </aside>
+
+      <section class="panel column workspace-main">
+        <section class="subpanel">
+          <div class="subpanel-header">
+            <h3>事实详情</h3>
+            <span id="qa-detail-meta" class="subtle">未选择</span>
+          </div>
+          <div id="qa-detail" class="detail-shell empty-state">从左侧选择待审核事实。</div>
+        </section>
+
+        <section class="subpanel top-gap">
+          <div class="subpanel-header">
+            <h3>审核动作</h3>
+          </div>
+          <div class="action-grid">
+            <button id="qa-approve" class="button-primary" type="button">通过</button>
+            <label class="field">
+              <span>修正值</span>
+              <input id="qa-correct-value" type="text" placeholder="输入新的原始值">
+            </label>
+            <button id="qa-correct" class="button-secondary" type="button">提交修正</button>
+            <label class="field">
+              <span>重映射指标</span>
+              <select id="qa-remap-target"></select>
+            </label>
+            <button id="qa-remap" class="button-secondary" type="button">提交重映射</button>
+          </div>
+        </section>
+      </section>
+
+      <aside class="panel column pdf-column">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Evidence</p>
+            <h2>来源页</h2>
+          </div>
+          <span id="qa-page-label" class="panel-tag">Page -</span>
+        </div>
+        <div class="page-preview-shell">
+          <img id="qa-page-preview" class="page-preview-image" alt="QA page preview">
+        </div>
+        <div class="form-actions top-gap">
+          <a id="qa-open-viewer" class="button-primary" href="#">打开文档对照页</a>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="/static/qa-workbench.js" defer></script>
+</body>
+</html>

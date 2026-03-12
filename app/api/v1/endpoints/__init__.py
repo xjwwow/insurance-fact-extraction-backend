@@ -1,0 +1,13 @@
+﻿"""Endpoint modules."""
+
+from app.api.v1.endpoints.documents import router as documents_router
+from app.api.v1.endpoints.facts import router as facts_router
+from app.api.v1.endpoints.health import router as health_router
+from app.api.v1.endpoints.review import router as review_router
+
+__all__ = [
+    "documents_router",
+    "facts_router",
+    "health_router",
+    "review_router",
+]

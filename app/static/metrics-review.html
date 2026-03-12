@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>指标审核台</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="shell shell-viewer">
+  <main class="page page-viewer">
+    <header class="viewer-header panel">
+      <div>
+        <p class="eyebrow">Metric Review Workbench</p>
+        <h1>指标审核台</h1>
+        <p class="hero-text">仅展示高置信度 learned metric，支持并入标准指标或驳回噪音项。</p>
+      </div>
+      <div class="viewer-actions">
+        <a class="button-secondary" href="/">返回上传页</a>
+        <a class="button-secondary" href="/metrics/library">指标库</a>
+        <a class="button-secondary" href="/qa/workbench">校对台</a>
+      </div>
+    </header>
+
+    <section class="panel workspace-panel">
+      <div class="filter-grid">
+        <label class="field">
+          <span>公司过滤</span>
+          <input id="company-filter" type="text" placeholder="例如 pingan-ui-test">
+        </label>
+        <label class="field">
+          <span>审核人</span>
+          <input id="reviewer" type="text" value="admin">
+        </label>
+      </div>
+      <div class="form-actions top-gap">
+        <button id="refresh-button" class="button-primary" type="button">刷新队列</button>
+      </div>
+    </section>
+
+    <section class="panel workspace-panel">
+      <div class="panel-header">
+        <div>
+          <p class="eyebrow">Queue</p>
+          <h2>Learned Metric Candidates</h2>
+        </div>
+        <span id="queue-count" class="panel-tag">0 items</span>
+      </div>
+      <div id="metric-review-list" class="review-grid"></div>
+    </section>
+  </main>
+
+  <script src="/static/metrics-review.js" defer></script>
+</body>
+</html>

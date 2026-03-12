@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>年报对照工作台</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="shell shell-viewer">
+  <main class="page page-viewer">
+    <header class="viewer-header panel">
+      <div>
+        <p class="eyebrow">Document Viewer</p>
+        <h1 id="viewer-title">年报事实工作台</h1>
+        <p id="viewer-subtitle" class="hero-text">正在加载文档信息...</p>
+      </div>
+      <div class="viewer-actions">
+        <a id="viewer-back-link" class="button-secondary hidden" href="#">返回来源页</a>
+        <a class="button-secondary" href="/">返回上传页</a>
+        <a id="viewer-qa-link" class="button-secondary" href="#">表格质检</a>
+        <a class="button-secondary" href="/metrics/library">指标库</a>
+        <a class="button-secondary" href="/metrics/values">指标值页</a>
+        <a class="button-secondary" href="/qa/workbench">校对台</a>
+        <a id="open-pdf-link" class="button-primary" href="#" target="_blank" rel="noreferrer">打开原始 PDF</a>
+      </div>
+    </header>
+
+    <section id="viewer-layout" class="viewer-layout viewer-layout-split">
+      <aside class="panel column tables-column viewer-pane viewer-pane-nav">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">导航</p>
+            <h2>目录与表格</h2>
+          </div>
+          <span id="nav-count" class="panel-tag">0 张表</span>
+        </div>
+        <label class="field compact">
+          <span>搜索</span>
+          <input id="table-search" type="text" placeholder="章节名、表名、页码">
+        </label>
+        <div class="form-actions top-gap">
+          <button id="expand-outline" class="button-secondary" type="button">全部展开</button>
+          <button id="collapse-outline" class="button-secondary" type="button">全部折叠</button>
+        </div>
+        <div id="table-list" class="outline-tree panel-scroll"></div>
+      </aside>
+
+      <div class="layout-resizer" data-resize="nav" title="拖动调整左侧宽度"></div>
+
+      <section class="panel column data-column viewer-pane viewer-pane-main">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">数据</p>
+            <h2>表格与抽取结果</h2>
+          </div>
+          <span id="fact-badge" class="panel-tag">0 条事实</span>
+        </div>
+
+        <div id="summary-cards" class="summary-cards"></div>
+
+        <section class="subpanel">
+          <div class="subpanel-header">
+            <h3>当前表格</h3>
+            <span id="selected-table-meta" class="subtle">未选择</span>
+          </div>
+          <div id="selected-table-preview" class="table-preview empty-state">
+            从左侧选择表格后，这里会展示结构化表格内容。
+          </div>
+        </section>
+
+        <section class="subpanel">
+          <div class="subpanel-header">
+            <h3>抽取事实</h3>
+            <span id="facts-meta" class="subtle">加载中...</span>
+          </div>
+          <div class="facts-table-wrap">
+            <table class="facts-table">
+              <thead>
+                <tr>
+                  <th>页码</th>
+                  <th>指标</th>
+                  <th>列头/期间</th>
+                  <th>原值</th>
+                  <th>归一值</th>
+                  <th>单位</th>
+                  <th>可用状态</th>
+                  <th>审核</th>
+                </tr>
+              </thead>
+              <tbody id="facts-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <div class="layout-resizer" data-resize="pdf" title="拖动调整右侧宽度"></div>
+
+      <aside class="panel column pdf-column viewer-pane viewer-pane-pdf">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">页面对照</p>
+            <h2>PDF 页面对照</h2>
+          </div>
+          <span id="pdf-page-label" class="panel-tag">P.1</span>
+        </div>
+        <div class="preview-toolbar">
+          <button id="preview-prev" class="button-secondary" type="button">上一页</button>
+          <button id="preview-next" class="button-secondary" type="button">下一页</button>
+          <button id="preview-mode-image" class="button-secondary active" type="button">页图预览</button>
+          <button id="preview-mode-pdf" class="button-secondary" type="button">原始 PDF</button>
+          <button id="preview-open-modal" class="button-primary" type="button">放大查看</button>
+        </div>
+        <div id="preview-status" class="preview-status subtle">点击事实行可定位并高亮对应单元格。</div>
+        <div class="page-preview-shell">
+          <div id="page-preview-canvas" class="page-preview-canvas">
+            <img id="page-preview-image" class="page-preview-image" alt="PDF page preview">
+            <div id="page-preview-overlay" class="page-preview-overlay"></div>
+          </div>
+          <object id="page-preview-pdf" class="page-preview-pdf hidden" type="application/pdf"></object>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <div id="preview-modal" class="modal-shell hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal="true"></div>
+    <div class="modal-dialog">
+      <div class="panel modal-panel">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Zoom Preview</p>
+            <h2 id="modal-page-label">P.1</h2>
+          </div>
+          <div class="viewer-actions">
+            <button id="modal-zoom-out" class="button-secondary" type="button">缩小</button>
+            <button id="modal-zoom-in" class="button-secondary" type="button">放大</button>
+            <button id="modal-reset" class="button-secondary" type="button">重置</button>
+            <button id="modal-prev" class="button-secondary" type="button">上一页</button>
+            <button id="modal-next" class="button-secondary" type="button">下一页</button>
+            <button id="modal-close" class="button-primary" type="button">关闭</button>
+          </div>
+        </div>
+        <div id="modal-status" class="preview-status subtle">页内放大支持继续查看高亮区域。</div>
+        <div class="modal-stage">
+          <div id="modal-zoom-layer" class="modal-zoom-layer">
+            <div id="modal-preview-canvas" class="page-preview-canvas modal-preview-canvas">
+              <img id="modal-preview-image" class="modal-preview-image" alt="PDF page zoom preview">
+              <div id="modal-preview-overlay" class="page-preview-overlay"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/viewer.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>指标值页</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="shell shell-viewer">
+  <main class="page page-viewer">
+    <header class="viewer-header panel">
+      <div>
+        <p class="eyebrow">Metric Values</p>
+        <h1>指标值台账</h1>
+        <p class="hero-text">查看某指标在不同公司、报告和期间下的值，并区分自动可用、待审核和人工确认状态。</p>
+      </div>
+      <div class="viewer-actions">
+        <a class="button-secondary" href="/metrics/library">返回指标库</a>
+        <a class="button-secondary" href="/qa/workbench">校对台</a>
+      </div>
+    </header>
+
+    <section class="panel workspace-panel">
+      <div class="filter-grid metric-values-grid">
+        <label class="field"><span>指标 ID</span><input id="value-metric-id" type="text" placeholder="canonical_metric_id"></label>
+        <label class="field"><span>公司</span><select id="value-company"><option value="">全部公司</option><option value="pingan">平安</option><option value="china_life">国寿</option><option value="picc">人保</option><option value="cpic">太保</option><option value="taiping">太平</option><option value="nci">新华</option><option value="taikang">泰康</option></select></label>
+        <label class="field"><span>报告类型</span><select id="value-report-type"><option value="">全部</option><option value="annual_report">年报</option><option value="semiannual_report">半年报</option><option value="quarterly_report">季报</option><option value="monthly_report">月报</option></select></label>
+        <label class="field"><span>业务条线</span><select id="value-business-line"><option value="">全部</option><option value="group">集团</option><option value="life">寿险</option><option value="pnc">产险</option></select></label>
+        <label class="field"><span>年份</span><input id="value-report-year" type="number" min="2000" max="2100" placeholder="2024"></label>
+        <label class="field"><span>期间类型</span><select id="value-period-type"><option value="">全部</option><option value="ANNUAL">年度</option><option value="HALF_YEAR">半年</option><option value="QUARTER">季度</option><option value="MONTHLY">月度</option></select></label>
+        <label class="field"><span>可用状态</span><select id="value-status"><option value="">全部</option><option value="AUTO_READY">自动可用</option><option value="PENDING_REVIEW">待审核</option><option value="MANUAL_CONFIRMED">人工确认可用</option><option value="NEEDS_RECHECK">待复核</option><option value="REJECTED">已驳回</option></select></label>
+        <div class="form-actions metric-filter-actions"><button id="value-refresh" class="button-primary" type="button">刷新</button></div>
+      </div>
+    </section>
+
+    <section class="panel workspace-panel top-gap">
+      <div id="value-summary-cards" class="summary-cards"></div>
+    </section>
+
+    <section class="panel workspace-panel top-gap">
+      <div class="panel-header"><div><p class="eyebrow">Values</p><h2>指标值列表</h2></div><span id="value-count" class="panel-tag">0 条</span></div>
+      <div class="facts-table-wrap top-gap">
+        <table class="facts-table">
+          <thead><tr><th>指标</th><th>公司</th><th>报告</th><th>期间</th><th>原值</th><th>归一值</th><th>单位</th><th>状态</th><th>证据</th></tr></thead>
+          <tbody id="value-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/metrics-values.js" defer></script>
+</body>
+</html>
