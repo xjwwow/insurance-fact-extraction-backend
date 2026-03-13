@@ -57,6 +57,7 @@
 - 表格 canonical 化
 - fact 抽取、单位归一、期间识别
 - 正式指标库、候选指标、别名、证据链
+- 核心指标库导入预览与模板下载
 - 指标值查询与状态分层
 - 表格 QA 列表与 Excel 导出
 - 人工审核：approve / correct / remap
@@ -76,11 +77,24 @@
 - `GET /api/v1/metrics/values`
 - `GET /api/v1/metrics/{canonical_metric_id}`
 - `GET /api/v1/metrics/review/queue`
+- `GET /api/v1/metrics/import/template`
 - `POST /api/v1/metrics/import/preview`
 - `POST /api/v1/metrics/import`
 - `POST /api/v1/review/facts/{fact_id}/approve`
 - `POST /api/v1/review/facts/{fact_id}/correct`
 - `POST /api/v1/review/facts/{fact_id}/remap-metric`
+
+## 指标库导入模板
+- 指标库页支持直接下载导入模板：
+  - `GET /api/v1/metrics/import/template`
+- 模板文件名：
+  - `metric_import_template.xlsx`
+- 模板内容：
+  - `metrics_template` 工作表：字段表头 + 一行示例数据
+  - `instructions` 工作表：字段说明、必填项、枚举示例
+- 当前导入仍支持：
+  - `POST /api/v1/metrics/import/preview`
+  - `POST /api/v1/metrics/import`
 
 ## 本地运行
 ```powershell

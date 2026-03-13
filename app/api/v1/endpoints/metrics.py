@@ -1,4 +1,7 @@
+import io
+
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
@@ -132,6 +135,17 @@ def bootstrap_metric_library(db: Session = Depends(get_db)) -> MetricBootstrapRe
     service = _build_knowledge_service(db)
     result = service.bootstrap_metric_library()
     return MetricBootstrapResponse(**result)
+
+
+@router.get("/import/template")
+def download_metric_import_template(db: Session = Depends(get_db)) -> StreamingResponse:
+    service = _build_import_service(db)
+    content = service.build_template()
+    return StreamingResponse(
+        io.BytesIO(content),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": 'attachment; filename="metric_import_template.xlsx"'},
+    )
 
 
 @router.post("/import/preview", response_model=MetricImportPreviewResponse)

@@ -5,6 +5,7 @@ import hashlib
 import io
 from collections.abc import Iterable
 
+from openpyxl import Workbook
 from openpyxl import load_workbook
 
 from app.core.ids import generate_id
@@ -58,6 +59,85 @@ class MetricLibraryImportService:
 
     def __init__(self, metric_repository: MetricRepository) -> None:
         self.metric_repository = metric_repository
+
+    def build_template(self) -> bytes:
+        workbook = Workbook()
+        template_sheet = workbook.active
+        template_sheet.title = "metrics_template"
+
+        headers = [
+            "指标编码",
+            "指标名称",
+            "英文名",
+            "指标分类",
+            "二级分类",
+            "定义",
+            "值类型",
+            "默认单位",
+            "别名",
+            "适用报告类型",
+            "适用业务条线",
+            "父级指标编码",
+            "排序",
+            "公式表达式",
+            "依赖指标编码",
+        ]
+        template_sheet.append(headers)
+        template_sheet.append(
+            [
+                "core_premium_income",
+                "保险业务收入",
+                "Premium income",
+                "盈利能力",
+                "保险收入",
+                "保险业务形成的主营收入",
+                "AMOUNT",
+                "元",
+                "保费收入,保险收入",
+                "annual_report,semiannual_report",
+                "group,life,pnc",
+                "",
+                "10",
+                "",
+                "",
+            ]
+        )
+
+        guide_sheet = workbook.create_sheet("instructions")
+        guide_rows = [
+            ("字段", "是否必填", "说明", "允许值/示例"),
+            ("指标编码", "是", "唯一业务编码，用于导入更新匹配", "core_premium_income"),
+            ("指标名称", "是", "中文标准指标名", "保险业务收入"),
+            ("英文名", "否", "英文名称", "Premium income"),
+            ("指标分类", "否", "一级分类", "盈利能力"),
+            ("二级分类", "否", "二级分类", "保险收入"),
+            ("定义", "否", "指标定义说明", "保险业务形成的主营收入"),
+            ("值类型", "否", "未填默认 AMOUNT", "AMOUNT / RATIO / COUNT"),
+            ("默认单位", "否", "指标默认单位", "元 / % / 次"),
+            ("别名", "否", "多个值可用逗号或分号分隔", "保费收入,保险收入"),
+            (
+                "适用报告类型",
+                "否",
+                "可留空，留空表示全部报告类型",
+                ", ".join(REPORT_TYPE_OPTIONS.keys()),
+            ),
+            (
+                "适用业务条线",
+                "否",
+                "可留空，留空表示全部业务条线",
+                ", ".join(BUSINESS_LINE_OPTIONS.keys()),
+            ),
+            ("父级指标编码", "否", "用于建立指标层级", "core_revenue"),
+            ("排序", "否", "整数，未填默认 0", "10"),
+            ("公式表达式", "否", "展示用途的公式文本", "A + B - C"),
+            ("依赖指标编码", "否", "多个编码可用逗号或分号分隔", "metric_a,metric_b"),
+        ]
+        for row in guide_rows:
+            guide_sheet.append(row)
+
+        output = io.BytesIO()
+        workbook.save(output)
+        return output.getvalue()
 
     def preview(self, file_name: str, file_bytes: bytes) -> dict:
         rows = self._load_rows(file_name, file_bytes)
